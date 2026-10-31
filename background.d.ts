@@ -10,5 +10,12 @@ export interface AppStateLike {
 export function watchAppState(
   pusher: Pick<Pusher, 'connect' | 'disconnect' | 'connection'> | null | undefined,
   appState: AppStateLike,
-  options?: { timeout?: number | null; setTimer?: typeof setTimeout; clearTimer?: typeof clearTimeout },
+  options?: {
+    timeout?: number | null;
+    /** Close on entering the background instead of after timeout; default in HibiraProvider on Android. */
+    immediate?: boolean;
+    setTimer?: typeof setTimeout;
+    clearTimer?: typeof clearTimeout;
+    now?: () => number;
+  },
 ): () => void;

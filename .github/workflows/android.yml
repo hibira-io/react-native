@@ -1,6 +1,6 @@
 # Builds e2e/android (an Expo app on the packed package) as a release APK and
 # runs it on an Android emulator: connection, chunked events both ways under a
-# 4 KB limit, presence, the 30 s background disconnect and reconnect, and push
+# 4 KB limit, presence, the background disconnect and reconnect, and push
 # registration. First against soketi in a service container; then, when the
 # HIBIRA_E2E_* secrets are set, against ws.hibira.io (native Origin, Free plan
 # limit, Hibira Push). GOOGLE_SERVICES_JSON adds real FCM delivery.

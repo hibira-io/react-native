@@ -6,7 +6,7 @@
 // 4 KB) are sent in chunks and put back together.
 
 import { createElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import {
   HibiraProvider as WebProvider,
   hibiraOptions,
@@ -71,7 +71,8 @@ export function HibiraProvider({ appKey, options, client, backgroundTimeout = DE
 
 function AppStateWatcher({ timeout }) {
   const pusher = usePusher();
-  useEffect(() => watchAppState(pusher, AppState, { timeout }), [pusher, timeout]);
+  const immediate = Platform.OS === 'android';
+  useEffect(() => watchAppState(pusher, AppState, { timeout, immediate }), [pusher, timeout, immediate]);
   return null;
 }
 

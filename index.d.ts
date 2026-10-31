@@ -8,7 +8,7 @@ export { CHUNK_KEY, DEFAULT_MAX_BYTES, DEFAULT_MAX_CHUNKS, chunkPayload, createC
 export type { ChunkEnvelope, ChunkOptions, ChunkAssembler } from './chunk.js';
 
 export interface HibiraProviderProps extends WebProviderProps {
-  /** ms in the background before the connection closes, default 30000; null keeps it open. */
+  /** ms in the background before the connection closes, default 30000 (Android closes at once: its JS timers pause there); null keeps it open. */
   backgroundTimeout?: number | null;
 }
 

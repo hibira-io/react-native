@@ -9,7 +9,7 @@ Pusher-compatible server, plus push notifications through Hibira Push.
 - **Channels**: the hooks of [@hibira-io/react](https://github.com/hibira-io/react)
   (`useEvent`, `usePresence`, `useTrigger`, `useStream`...) on the React
   Native build of pusher-js.
-- **Background aware**: the connection closes after 30 s in the background
+- **Background aware**: the connection closes in the background (after 30 s on iOS, at once on Android)
   and opens again when the app returns, so a phone in a pocket does not hold
   one of your plan's connections.
 - **Payloads of any size**: `triggerChunked()` and `useChunkedTrigger()` split
@@ -66,7 +66,7 @@ the phone itself), `wsPort` and `forceTLS: false`.
 | `appKey` | | app key from the portal |
 | `options` | | pusher-js options |
 | `client` | | an existing pusher-js client to use instead |
-| `backgroundTimeout` | `30000` | ms in the background before the connection closes; `null` keeps it open |
+| `backgroundTimeout` | `30000` | ms in the background before the connection closes; `null` keeps it open. Android pauses JS timers in the background, so there the connection closes as soon as the app leaves the foreground |
 
 Subscriptions survive the background: they are made again when the
 connection comes back. Events sent while the app was away are not replayed,
@@ -253,7 +253,7 @@ npm run test:e2e    # against a running server, see test/e2e/sdk.e2e.mjs
 The `android` workflow builds `e2e/android` as a release APK and runs it on an
 Android emulator, driven from the host by `e2e/android/backend.mjs`. It checks
 the connection, chunked events both ways under a 4 KB limit, presence, the
-30 s background disconnect and reconnect, and push registration. Each run goes
+background disconnect and reconnect, and push registration. Each run goes
 against soketi first, and also against ws.hibira.io when these repository
 secrets are set:
 
