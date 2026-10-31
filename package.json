@@ -1,6 +1,6 @@
 {
   "name": "@hibira-io/react-native",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native and Expo hooks for Hibira and other Pusher-compatible servers: channels, events, presence, LLM streams, chunked payloads that fit 4 KB messages, and push notifications through Hibira Push",
   "keywords": [
     "react-native",
