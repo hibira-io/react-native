@@ -228,8 +228,10 @@ const app = http.createServer(async (req, res) => {
     }
     if (req.url === '/event' && req.method === 'POST') {
       const e = JSON.parse(await body(req));
-      send(200, {});
-      return onEvent(e).catch((err) => failStep(e.step, String(err?.message ?? err)));
+      // Answered after the step is handled, so the app can wait for checks
+      // (push-checked) before it moves on.
+      await onEvent(e).catch((err) => failStep(e.step, String(err?.message ?? err)));
+      return send(200, {});
     }
     send(404, {});
   } catch (err) {

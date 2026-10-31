@@ -65,7 +65,7 @@ function Runner({ cfg }) {
   const done = useRef(new Set());
   const note = (step, detail) => {
     setLines((l) => [...l, `${step} ${detail ? JSON.stringify(detail) : ''}`]);
-    report(step, detail);
+    return report(step, detail);
   };
   const once = (key, fn) => {
     if (done.current.has(key)) return;
@@ -131,7 +131,7 @@ function Runner({ cfg }) {
         await push.addDeviceInterest(interest);
         const interests = await push.getDeviceInterests();
         const stored = await AsyncStorage.getAllKeys();
-        note('push-registered', {
+        await note('push-registered', {
           ok: interests.includes(interest) && (await push.getDeviceId()) === deviceId && stored.length > 0,
           deviceId,
         });
