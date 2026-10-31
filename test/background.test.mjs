@@ -55,3 +55,31 @@ test('timeout null keeps the connection open', () => {
   assert.equal(AppState.listeners, 0);
   stop();
 });
+
+test('immediate closes as the app leaves the foreground (Android pauses timers)', () => {
+  const pusher = fakePusher();
+  pusher.setState('connected');
+  const t = timers();
+  const stop = watchAppState(pusher, AppState, { timeout: 30000, immediate: true, ...t });
+  AppState.set('background');
+  assert.equal(t.pending.size, 0);
+  assert.equal(pusher.connection.state, 'disconnected');
+  AppState.set('active');
+  assert.equal(pusher.connection.state, 'connected');
+  stop();
+});
+
+test('back after the timeout when the timer never ran: a fresh connection', () => {
+  const pusher = fakePusher();
+  pusher.setState('connected');
+  const t = timers();
+  let clock = 1000;
+  const stop = watchAppState(pusher, AppState, { timeout: 30000, ...t, now: () => clock });
+  AppState.set('background');
+  clock += 45000; // suspended: the timer did not fire
+  AppState.set('active');
+  assert.equal(t.pending.size, 0);
+  assert.deepEqual(pusher.log.slice(-2), [['disconnect'], ['connect']]);
+  assert.equal(pusher.connection.state, 'connected');
+  stop();
+});

@@ -5,16 +5,18 @@
 // when it returns, and payloads too big for one message (Free plans allow
 // 4 KB) are sent in chunks and put back together.
 
-import { createElement, useCallback, useEffect, useMemo, useRef } from 'react';
-import { AppState } from 'react-native';
+import { createElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AppState, Platform } from 'react-native';
 import {
   HibiraProvider as WebProvider,
+  hibiraOptions,
   useChannel,
   useEvent,
   usePusher,
 } from '@hibira-io/react';
 import { watchAppState, DEFAULT_BACKGROUND_TIMEOUT } from './background.js';
 import { chunkPayload, createChunkAssembler } from './chunk.js';
+import { PusherClient } from './pusher-client.js';
 
 export {
   HIBIRA_DEFAULTS,
@@ -42,13 +44,35 @@ export { CHUNK_KEY, DEFAULT_MAX_BYTES, DEFAULT_MAX_CHUNKS, chunkPayload, createC
  * @param {number|null} [props.backgroundTimeout=30000] ms in the background
  *   before the connection closes; null keeps it open
  */
-export function HibiraProvider({ backgroundTimeout = DEFAULT_BACKGROUND_TIMEOUT, children, ...props }) {
-  return createElement(WebProvider, props, createElement(AppStateWatcher, { timeout: backgroundTimeout }), children);
+export function HibiraProvider({ appKey, options, client, backgroundTimeout = DEFAULT_BACKGROUND_TIMEOUT, children }) {
+  // The client is made here rather than by @hibira-io/react, whose default
+  // import of pusher-js is not the constructor under Metro.
+  const [own, setOwn] = useState(null);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+
+  useEffect(() => {
+    if (client || !appKey) return undefined;
+    const pusher = new PusherClient(appKey, hibiraOptions(optionsRef.current));
+    setOwn(pusher);
+    return () => {
+      pusher.disconnect();
+      setOwn(null);
+    };
+  }, [client, appKey]);
+
+  return createElement(
+    WebProvider,
+    { client: client ?? own },
+    createElement(AppStateWatcher, { timeout: backgroundTimeout }),
+    children,
+  );
 }
 
 function AppStateWatcher({ timeout }) {
   const pusher = usePusher();
-  useEffect(() => watchAppState(pusher, AppState, { timeout }), [pusher, timeout]);
+  const immediate = Platform.OS === 'android';
+  useEffect(() => watchAppState(pusher, AppState, { timeout, immediate }), [pusher, timeout, immediate]);
   return null;
 }
 

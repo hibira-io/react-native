@@ -1,4 +1,6 @@
-// Just enough of react-native for the hooks: an AppState tests drive by hand.
+// Just enough of react-native for the hooks: an AppState tests drive by hand,
+// and a Platform whose OS tests can set.
+export const Platform = { OS: 'ios' };
 const listeners = new Set();
 export const AppState = {
   currentState: 'active',
