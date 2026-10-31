@@ -1,0 +1,22 @@
+{
+  "name": "hibira-react-native-example",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "@hibira-io/react-native": "^0.1.0",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-community/netinfo": "12.0.1",
+    "expo": "~58.0.21",
+    "expo-application": "~58.1.2",
+    "expo-notifications": "~58.1.7",
+    "pusher-js": "^8.6.0",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  }
+}
