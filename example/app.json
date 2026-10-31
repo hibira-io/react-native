@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Hibira example",
+    "slug": "hibira-react-native-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "ios": {
+      "bundleIdentifier": "com.example.hibira"
+    },
+    "android": {
+      "package": "com.example.hibira",
+      "googleServicesFile": "./google-services.json"
+    },
+    "plugins": ["expo-notifications"]
+  }
+}

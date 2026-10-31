@@ -1,0 +1,46 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["20", "22", "24"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - name: Package contents
+        run: npm pack --dry-run
+
+  # Bundles the Expo example with Metro for iOS and Android, using the packed
+  # package as an app would install it from npm.
+  expo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm pack
+      - working-directory: example
+        run: |
+          npm pkg delete 'dependencies.@hibira-io/react-native'
+          npm install
+          npm install --no-save ../hibira-io-react-native-*.tgz
+      - working-directory: example
+        run: npx expo export --platform ios --platform android --output-dir dist
+        env:
+          CI: "1"
+          EXPO_PUBLIC_HIBIRA_KEY: ci
