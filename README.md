@@ -72,13 +72,14 @@ Subscriptions survive the background: they are made again when the
 connection comes back. Events sent while the app was away are not replayed,
 so refetch what matters when the app becomes active.
 
-### Allowed origins (Free plan)
+### Allowed origins
 
-On the Free plan an app accepts only the origins in its allowed origins.
-React Native's WebSocket sends an Origin made from the socket URL: iOS sends
-`https://ws.hibira.io` and Android `https://ws.hibira.io:443`. Add both to
-the app's allowed origins in the portal, or the app can't connect. Paid
-plans can use `*`.
+Apps on Hibira need nothing in their allowed origins for React Native.
+React Native's WebSocket sends an Origin made from the socket URL (iOS
+`https://ws.hibira.io`, Android `https://ws.hibira.io:443`); Hibira knows
+that Origin as a native app's and does not apply the allowlist to it. A
+self-hosted pusher-server older than v0.2.26 does not, so there add both
+to the app's allowed origins (or upgrade).
 
 ## Hooks
 
