@@ -233,7 +233,8 @@ const app = http.createServer(async (req, res) => {
     }
     send(404, {});
   } catch (err) {
-    send(500, { error: String(err) });
+    log(`http ${req.url}: ${err?.stack ?? err}`);
+    send(500, { error: 'internal error' });
   }
 });
 
