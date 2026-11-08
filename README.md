@@ -81,6 +81,15 @@ that Origin as a native app's and does not apply the allowlist to it. A
 self-hosted pusher-server older than v0.2.26 does not, so there add both
 to the app's allowed origins (or upgrade).
 
+### Encrypted channels
+
+`private-encrypted-` channels work as they are: the React Native build of
+pusher-js includes encryption. Your backend encrypts each event with its
+encryption master key (`encryptionMasterKeyBase64` in the `pusher` package)
+and returns the channel's key from the auth endpoint; Hibira relays
+ciphertext it cannot decrypt. Client events are not allowed on encrypted
+channels.
+
 ## Hooks
 
 ```jsx
