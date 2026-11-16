@@ -1,7 +1,7 @@
 {
   "name": "@hibira-io/react-native",
-  "version": "0.1.1",
-  "description": "React Native and Expo hooks for Hibira and other Pusher-compatible servers: channels, events, presence, LLM streams, chunked payloads that fit 4 KB messages, and push notifications through Hibira Push",
+  "version": "0.2.0",
+  "description": "React Native and Expo hooks for Hibira and other Pusher-compatible servers: channels, events, presence, LLM streams, chunked payloads that fit 4 KB messages, push notifications through Hibira Push, and the Hibira Chat API",
   "keywords": [
     "react-native",
     "expo",
@@ -14,6 +14,9 @@
     "push notifications",
     "expo-notifications",
     "beams",
+    "chat",
+    "chat-api",
+    "messaging",
     "hibira"
   ],
   "homepage": "https://hibira.io",
@@ -50,6 +53,10 @@
     "./chunk": {
       "types": "./chunk.d.ts",
       "default": "./chunk.js"
+    },
+    "./chat": {
+      "types": "./chat.d.ts",
+      "default": "./chat.js"
     },
     "./package.json": "./package.json"
   },

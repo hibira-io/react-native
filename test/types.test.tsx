@@ -46,3 +46,27 @@ async function server(pusher: { trigger(c: string, e: string, d: any, p?: { sock
   return n + s + RegistrationState.PERMISSION_DENIED + chunkPayload({}).length + createChunkAssembler().pending;
 }
 void server;
+
+import {
+  createChatClient,
+  messageText,
+  useChatClient,
+  useChatConversation,
+  useChatConversations,
+  type ChatMessage,
+} from '@hibira-io/react-native/chat';
+
+const chat = createChatClient({ appId: 'a', token: async () => 'jwt' });
+chat.on((event, data) => event + data);
+
+function ChatScreen() {
+  const client = useChatClient({ appId: 'a', tokenUrl: 'https://app/chat-token' });
+  const room = useChatConversation(client, 'trip-1');
+  const list = useChatConversations(chat);
+  const first: ChatMessage | undefined = room.messages[0];
+  room.typing();
+  void room.send({ text: 'hi', metadata: { reply_to: 1 } });
+  void room.loadOlder();
+  return [messageText(first, 'ja'), room.typingUsers.join(','), list.unread.toFixed(), room.hasOlder];
+}
+void ChatScreen;
