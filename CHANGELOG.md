@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- `@hibira-io/react-native/chat`: a client for the Hibira Chat API's user
+  routes (including translations and the user's language), live `chat.*`
+  events from a signed-in pusher-js client, and `useChatConversation` /
+  `useChatConversations` (with `createConversationStore` /
+  `createConversationListStore` for use without React): history paging,
+  typing, read receipts, unread counts and catch-up after reconnects.
+
 ## 0.1.1
 
 - Fix: `HibiraProvider` with `appKey` crashed on React Native with

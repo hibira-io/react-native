@@ -245,6 +245,66 @@ messaging().onTokenRefresh((token) => push.updateToken(token));
 
 Pass `endpoint` for a self-hosted server.
 
+## Chat
+
+`@hibira-io/react-native/chat` is a client for the
+[Hibira Chat API](https://hibira.io/chat-api): conversations with stored
+history, live messages, edits, reactions, typing, read receipts and
+translations. Live events come from the provider's connection once the user
+is signed in (`pusher.signin()`), so there is nothing else to wire.
+
+Your backend gives the app two things, both signed with the app secret:
+
+1. A **user token** for the HTTP calls: an HS256 JWT `{"sub": userId, "exp": ...}`
+   (or one from the Chat API's `POST /apps/{app_id}/chat/tokens`).
+2. A **user authentication endpoint** for `pusher.signin()`
+   (`pusher.authenticateUser(socket_id, { id })` in the Node library), set as
+   `userAuthentication: { endpoint }` in the provider's options.
+
+```jsx
+import { HibiraProvider, usePusher } from '@hibira-io/react-native';
+import { useChatClient, useChatConversation, useChatConversations, messageText } from '@hibira-io/react-native/chat';
+
+<HibiraProvider appKey="YOUR_APP_KEY" options={{ userAuthentication: { endpoint: 'https://api.example.com/pusher/user-auth' } }}>
+  <Chat />
+</HibiraProvider>;
+
+function Chat() {
+  const pusher = usePusher();
+  useEffect(() => pusher?.signin(), [pusher]);
+  const chat = useChatClient({ appId: 'YOUR_APP_ID', token: () => api.fetchChatToken() });
+  const { conversations, unread } = useChatConversations(chat);
+  // ...
+}
+
+function Room({ chat, id }) {
+  const room = useChatConversation(chat, id);
+  return (
+    <FlatList
+      data={room.messages}
+      keyExtractor={(m) => String(m.seq)}
+      renderItem={({ item }) => <Text>{item.deleted_at ? 'Message deleted' : messageText(item, myLanguage)}</Text>}
+      onStartReached={room.loadOlder}
+      onViewableItemsChanged={() => room.markRead()}
+      ListFooterComponent={room.typingUsers.length ? <Text>{room.typingUsers.join(', ')} typing…</Text> : null}
+    />
+  );
+  // In the composer: onChangeText={() => room.typing()} and room.send(text).
+}
+```
+
+The conversation re-reads its newest messages each time the connection
+comes back, so edits, deletes and reactions made while the app was in the
+background show up. The client has every user route (`conversations`,
+`messages`, `search`, `send`, `edit`, `remove`, `react`, `report`, `read`,
+`typing`, `translate`, `setLanguage`, `upload` from a picker's `{ uri }`),
+and `createConversationStore` / `createConversationListStore` work without
+React. Set the user's language with `chat.setLanguage('ja')` and messages
+from others arrive translated a moment later; `messageText(m, 'ja')` picks
+the translation (translation needs a Chat add-on on the hosted service).
+
+中文摘要：`@hibira-io/react-native/chat` 是 Hibira Chat API 的 React Native 用戶端。`useChatClient` 用 provider 的連線收 `chat.*` 即時事件（使用者需先 `pusher.signin()`），`useChatConversation` 提供單一對話的訊息、往前翻頁、輸入中、已讀與翻譯，重連後自動補齊；`useChatConversations` 提供含未讀數的對話列表。App 需要你的後端提供使用者 token（用 app secret 簽的 JWT）和使用者認證端點；建立對話、加成員仍由你的後端呼叫。
+
 ## Example
 
 [`example/`](example) is an Expo app with a live order feed, presence, a
