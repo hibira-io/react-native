@@ -208,7 +208,7 @@ await push.getRegistrationState();       // PERMISSION_DENIED, PERMISSION_GRANTE
 Your backend's token endpoint answers `GET ?user_id=...` with
 `{"token": "..."}`, made with `generateToken(userId)` of any Beams server SDK
 and the instance's secret key, after checking the signed-in user is that
-user. Publish with any Beams server SDK pointed at `https://ws.hibira.io`.
+user. Publish with any Beams server SDK pointed at `https://api.hibira.io`.
 
 Notes:
 

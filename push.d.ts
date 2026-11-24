@@ -1,4 +1,4 @@
-export const DEFAULT_ENDPOINT: 'https://ws.hibira.io';
+export const DEFAULT_ENDPOINT: 'https://api.hibira.io';
 export const PLATFORMS: ReadonlyArray<'fcm' | 'apns'>;
 
 export type PushPlatform = 'fcm' | 'apns';
@@ -48,7 +48,7 @@ export interface HibiraPushConfig {
   getToken: () => Promise<{ platform: PushPlatform; token: string }>;
   /** Keeps the device id between launches. */
   storage?: PushStorage | null;
-  /** Default https://ws.hibira.io. */
+  /** Default https://api.hibira.io. */
   endpoint?: string;
   /** iOS bundle id, the APNs topic; default the one set on the instance. */
   bundleIdentifier?: string;

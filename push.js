@@ -11,7 +11,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SDK_VERSION } from './version.js';
 
-export const DEFAULT_ENDPOINT = 'https://ws.hibira.io';
+export const DEFAULT_ENDPOINT = 'https://api.hibira.io';
 export const PLATFORMS = ['fcm', 'apns'];
 
 const INTEREST_RE = /^[A-Za-z0-9_\-=@,.;]+$/;
@@ -64,7 +64,7 @@ export class HibiraPush {
    * @param {() => Promise<{platform: 'fcm'|'apns', token: string}>} config.getToken
    * @param {object} [config.storage] AsyncStorage-like store; without it the
    *   device is registered again on every launch
-   * @param {string} [config.endpoint] default https://ws.hibira.io
+   * @param {string} [config.endpoint] default https://api.hibira.io
    * @param {string} [config.bundleIdentifier] iOS bundle id (APNs topic);
    *   default the one set on the instance
    * @param {object} [config.permissions] { get(), request() } returning
@@ -75,7 +75,7 @@ export class HibiraPush {
     if (typeof instanceId !== 'string' || !instanceId) throw new Error('HibiraPush: instanceId is required');
     if (typeof getToken !== 'function') throw new Error('HibiraPush: getToken is required');
     if (typeof endpoint !== 'string' || !/^https?:\/\//.test(endpoint)) {
-      throw new Error('HibiraPush: endpoint must be an http(s) URL, for example https://ws.hibira.io');
+      throw new Error('HibiraPush: endpoint must be an http(s) URL, for example https://api.hibira.io');
     }
     this.instanceId = instanceId;
     this._getToken = getToken;
