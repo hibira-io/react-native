@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
 - `@hibira-io/react-native/push`: the default endpoint is now
   `https://api.hibira.io`, Hibira's API host. `https://ws.hibira.io` keeps
