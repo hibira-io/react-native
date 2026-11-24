@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- `@hibira-io/react-native/push`: the default endpoint is now
+  `https://api.hibira.io`, Hibira's API host. `https://ws.hibira.io` keeps
+  working, so existing apps need no change.
+
 ## 0.2.0
 
 - `@hibira-io/react-native/chat`: a client for the Hibira Chat API's user
